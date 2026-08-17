@@ -201,6 +201,6 @@ GitHub: https://github.com/anubhab-jis
 
 MIT License
 
-App URL : https://consensustrap.ai.studio
+
 
 
