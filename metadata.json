@@ -1,0 +1,6 @@
+{
+  "name": "ConsensusTrap: Multi-Agent LLM Reliability Lab",
+  "description": "An AI research and experimentation platform evaluating multi-agent LLM consensus and correlated error traps.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
