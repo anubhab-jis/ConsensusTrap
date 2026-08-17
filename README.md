@@ -199,5 +199,8 @@ GitHub: https://github.com/anubhab-jis
 
 ## License
 
-Add the license you intend to use before presenting the repository as
-reusable open-source software.
+MIT License
+
+App URL : https://consensustrap.ai.studio
+
+
