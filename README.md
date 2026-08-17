@@ -201,6 +201,12 @@ GitHub: https://github.com/anubhab-jis
 
 MIT License
 
+## 🚀 Live Demo
+
+Try the deployed ConsensusTrap application:
+
+https://consensustrap.ai.studio
+
 
 
 
