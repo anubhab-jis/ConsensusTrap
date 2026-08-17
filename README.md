@@ -1,70 +1,203 @@
-# CONSENSUSTRAP: Multi-Agent LLM Reliability Lab
+# ConsensusTrap --- Multi-Agent LLM Reliability Lab
 
-An empirical AI safety and cognitive alignment platform built to pressure-test self-consistency paradigms, mixture-of-agents, and voting heuristics on LLM model families.
+> **A research-oriented web application for studying agreement,
+> diversity, and reliability in LLM-generated answers.**
 
----
+ConsensusTrap is an experimental AI reliability lab designed to
+investigate whether multiple LLM responses converge on the same answer
+and how that convergence can be measured.
 
-## 1. Core Research Question
-The platform is designed to investigate the following core thesis:
-> **"Does multi-agent agreement improve the reliability of LLM answers, or can independent agents confidently converge on identical incorrect answers (correlated error traps)?"**
+## Why ConsensusTrap?
 
-As multi-agent voting networks become a standard component of scaling LLM logical performance, the platform studies whether agent errors are statistically independent (validating Condorcet's Jury Theorem) or highly aligned due to shared pre-training data corpuses and reinforcement learning heuristics.
+Large Language Models can produce different answers to the same
+question. Agreement between outputs can be useful, but high agreement
+does **not automatically mean correctness**.
 
----
+The central research question is:
 
-## 2. Tested Experimental Conditions
-The lab implements four highly controlled, sequential and concurrent inference conditions:
-* **`SINGLE_AGENT`**: The control group. One model evaluates the research question exactly once to record base accuracy and formatting.
-* **`INDEPENDENT_3`**: An ensemble triad. Three identical model agents evaluate the query concurrently. No agent sees the reasoning of others, measuring uncoordinated error alignment.
-* **`INDEPENDENT_5`**: An ensemble pentad. Five identical model agents evaluate the query concurrently. This increases scope to study spontaneous consensus in larger groups.
-* **`SHARED_CONTEXT_5`**: A sequential conformity cascade. Five agents run in sequence. Agent 1 answers blindly. Agent 2 receives the original question + Agent 1's detailed response. Subsequent agents receive all prior responses, testing conversational anchoring bias.
+> **When multiple LLM agents answer the same question, how consistently
+> do they agree, and what can we learn from disagreement?**
 
----
+The application makes the experiment observable instead of hiding the
+intermediate outputs.
 
-## 3. Statistical Metrics
-ConsensusTrap implements two transparent, deterministic, and fully documented scientific metrics:
-### A. Agreement Index (Consensus Score)
-Calculates the alignment of successful agents with the primary choice:
-```text
-Agreement = | { i ∈ Successful : normalized_answer_i = Modal_Answer } | / | Successful |
+## Core Features
+
+### Experiment Configuration
+
+-   Research-question input
+-   Optional system-prompt override
+-   Temperature control
+-   Repetition/run configuration
+-   Experimental-condition selection
+
+### Gemini-Powered Experimentation
+
+-   Gemini model inference
+-   Controlled experiment execution
+-   Experiment history and status tracking
+-   Visible handling of unsuccessful runs
+
+### Reliability Metrics
+
+The results interface surfaces: - **Agreement Score** - **Diversity
+Rating** - **Mean Latency** - Experiment status - Agent success/failure
+state
+
+### Agent Output Inspector
+
+Individual agent outputs can be inspected for: - Normalized
+categorization - Confidence rating - Preceding/shared context - Detailed
+rationale/output
+
+### Experiment History
+
+Results can be reviewed with: - Experiment IDs - Conditions -
+Timestamps - Research questions - Agreement/diversity measurements -
+Individual-agent inspection
+
+### Data Export
+
+The interface provides JSON/CSV export actions for experiment results
+where enabled by the application.
+
+## Example Experiment
+
+A question such as:
+
+``` text
+What are the three laws of gravity?
 ```
-Failed agents are omitted from both the numerator and denominator to safeguard calculations against distortion.
 
-### B. Lexical Jaccard Divergence (Diversity Score)
-Measures variation in agent reasoning, explanation style, and vocabulary:
-1. Tokenizes and filters punctuation of raw texts to generate lowercase word-sets $W_1, W_2, ..., W_n$.
-2. Pairwise Jaccard similarity between two sets is computed as:
-   $$\text{Jaccard\_Sim}(W_i, W_j) = \frac{|W_i \cap W_j|}{|W_i \cup W_j|}$$
-3. Lexical divergence is defined as:
-   $$\text{Distance}(W_i, W_j) = 1.0 - \text{Jaccard\_Sim}(W_i, W_j)$$
-4. The final **Diversity Score** is the average Jaccard Distance across all unique pairs of successful agents.
+can be submitted and evaluated. The results view can display the
+generated answer, agreement, diversity, latency, and agent-level
+details.
 
----
+The project is designed to make model behavior inspectable rather than
+presenting only a final answer.
 
-## 4. Technical Architecture & Tech Stack
-Built with modern production-grade full-stack patterns:
-* **Frontend UI**: React (SPA-style tab navigation), TypeScript, and Tailwind CSS. Responsive sidebar layout, clinical light theme design, and custom interactive SVG charts (no external heavyweight charts libraries to ensure React 19 compatibility).
-* **Backend API**: Next.js 15 App Router API routes (`/app/api/*`).
-* **Inference Pipeline**: Google `@google/genai` TypeScript SDK (v2.4+). All calls are conducted securely on the server-side, completely shielding the `GEMINI_API_KEY` from client-side bundles.
-* **Persistence**: Hydration-safe browser-local history store (`localStorage`) with integrated JSON and CSV exports.
+## Research Integrity
 
----
+> **Failures should be recorded as failures, not hidden or replaced with
+> fabricated success.**
 
-## 5. Environment Variables
-To operate the workspace, configure the following variables inside your `.env` or system environment secrets:
+This principle is important for reliability research. API failures,
+malformed responses, latency issues, and model variability can
+themselves be meaningful experimental observations.
 
-```env
-# Required: Google Gemini API Authentication Key
-GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+## Methodology
 
-# Optional: The self-referential URL where this applet is hosted
-APP_URL="http://localhost:3000"
+A typical experiment follows:
+
+``` text
+Research Question
+       â†“
+Experimental Condition
+       â†“
+Prompt / Temperature Configuration
+       â†“
+LLM Inference
+       â†“
+Agent-Level Outputs
+       â†“
+Normalization / Categorization
+       â†“
+Agreement + Diversity Analysis
+       â†“
+Reliability Results
+       â†“
+Individual Agent Inspection
 ```
 
----
+## Technology
 
-## 6. Research Data & Integrity Standards
-The platform enforces absolute empirical honesty:
-* **No Synthetic Responses**: All data is fetched live from Gemini.
-* **Honest Failures**: Failed API queries are recorded as explicit failures and logged. We never silently substitute failed calls with fabricated dummy text.
-* **Consensus vs. Truth**: High agreement is never equated with correctness. It represents cognitive convergence and correlated error alignment, demonstrating the "trap."
+The repository is a TypeScript web application using Gemini for LLM
+inference.
+
+-   TypeScript
+-   React / modern web UI
+-   Gemini API
+-   Vite
+-   Tailwind CSS
+-   PostCSS
+-   ESLint
+-   Vitest
+
+> Check `package.json` for the exact versions used by the current
+> implementation.
+
+## Getting Started
+
+``` bash
+git clone https://github.com/anubhab-jis/consensustrap.git
+cd consensustrap
+npm install
+npm run dev
+```
+
+Configure the required Gemini environment variable using the
+repository's `.env.example`.
+
+**Never commit a real API key to GitHub.**
+
+## Interpreting the Metrics
+
+### Agreement Score
+
+Measures how closely participating outputs converge according to the
+application's normalization/aggregation logic.
+
+**High agreement is not proof of factual correctness.**
+
+### Diversity Rating
+
+Indicates variation among analyzed outputs. Low diversity can indicate
+strong convergence, but convergence can also result from shared model
+behavior or prompt effects.
+
+### Mean Latency
+
+Represents the average response latency recorded for the experiment.
+
+## Limitations
+
+ConsensusTrap is an experimental research tool, not a factuality oracle.
+
+-   Agreement does not guarantee correctness.
+-   Confidence values should not be treated as calibrated probabilities
+    unless independently validated.
+-   Results depend on model, prompt, temperature, repetitions, question
+    selection, and API behavior.
+-   LLM outputs can change across runs.
+-   API failures and rate limits can affect experiments.
+-   Lexical diversity measures, if used, do not directly measure
+    semantic or reasoning diversity.
+
+## Future Research
+
+Potential extensions include: - Ground-truth benchmark datasets -
+Cross-model experiments - Repeated trials across question categories -
+Semantic diversity metrics - Factuality evaluation - Statistical
+significance testing - Confidence calibration - Investigation of
+correlated model errors
+
+## Responsible Use
+
+Do not treat experiment metrics as definitive evidence of model safety,
+factuality, or real-world reliability. For high-stakes decisions, use
+human review and independent verification.
+
+## Project Status
+
+**Active experimental / research project.**
+
+## Author
+
+**Anubhab Guha Roy**
+
+GitHub: https://github.com/anubhab-jis
+
+## License
+
+Add the license you intend to use before presenting the repository as
+reusable open-source software.
